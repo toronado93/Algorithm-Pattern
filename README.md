@@ -6,4 +6,12 @@ There are two main folders. Algorithm and Pattern.
 - Algorithm you can find popular algorithmic problems and answers
 - In pattern you will be facing advance Node.js concepts
 
-Have a great day.
+  1.Algorithm
+
+-FrequencyCounterPattern
+-TwoPointerApproach
+-SlidingWindowPattern
+
+2.Pattern
+
+-CallbackEvents (Sync , Async reading file , Observer Pattern)

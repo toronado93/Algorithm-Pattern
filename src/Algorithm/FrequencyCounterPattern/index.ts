@@ -38,3 +38,5 @@ const result1 = same([1, 2, 3], [9, 1, 4]);
 const result2 = same([1, 2, 3], [1, 9]);
 const result3 = same([1, 2, 1], [4, 4, 1]);
 console.log(result1, result2, result3);
+
+export {};

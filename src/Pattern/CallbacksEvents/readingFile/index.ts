@@ -7,9 +7,14 @@ import syncReader from "./syncReader";
 
 const pathoftextfile = __dirname + "/data.txt";
 
-// asyncReader();
-// const syncresult = syncReader(pathoftextfile);
-// console.log(syncresult);
+// UncaughtException handler
+process.on("uncaughtException", (err) => {
+  console.error(`This will catch at last the JSON parsing exception:
+  ${err.message}`);
+  // Terminates the application with 1 (error) as exit code.
+  // Without the following line, the application would continue
+  process.exit(1);
+});
 
 // Create a server
 
@@ -24,6 +29,7 @@ const server = http.createServer((req, res) => {
 
   if (url === "/") {
     res.writeHead(200, { "Content-Type": "text/plain" });
+
     res.end("Hello World!");
 
     // sync file read
@@ -43,14 +49,20 @@ const server = http.createServer((req, res) => {
 
   //   async file read
   else if (url === "/asyncFileRead") {
-    asyncReader(pathoftextfile, (data) => {
-      const jsonResponse = JSON.stringify(data);
-      const performance = new Date(requestTime - data.timestamp).getSeconds();
+    asyncReader(pathoftextfile, (err, data) => {
+      // Error handling
+      if (err) {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.end("Critic error is occured in system");
+      } else if (data) {
+        const jsonResponse = JSON.stringify(data);
+        const performance = new Date(requestTime - data.timestamp).getSeconds();
 
-      console.log(data, `It took ${performance} milisec to complate`);
+        console.log(data, `It took ${performance} milisec to complate`);
 
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(jsonResponse);
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(jsonResponse);
+      }
     });
   } else {
     res.writeHead(404, { "Content-Type": "text/plain" });
