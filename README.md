@@ -11,6 +11,8 @@ There are two main folders. Algorithm and Pattern.
 -FrequencyCounterPattern
 -TwoPointerApproach
 -SlidingWindowPattern
+-DivideAndConquer
+-Recursion
 
 2.Pattern
 
