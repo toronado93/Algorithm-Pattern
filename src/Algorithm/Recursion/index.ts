@@ -95,4 +95,98 @@ const fullCapitalAndReverse = (array: string[]) => {
 };
 console.log(fullCapitalAndReverse(["banana", "tom", "cat"]));
 
+//you re given three item in one array reverse them (itself and also inside of array) and make the first one capital , the first before the reverse
+const exampleArray = ["tom", "cat", "banana"];
+
+const compharensiveReverse = (array: string[]) => {
+  const newArray: string[] = [];
+
+  function helper(array: string[]) {
+    // base
+    // d.v
+    // logic make it reverse inner and outter
+    if (array.length === 0) return;
+    helper(array.slice(1));
+    // if array[0] is banana make the magic
+    // make iteration then join and push to the newarray
+    let tempmember = [];
+    for (let i = array[0].length - 1; i >= 0; i--) {
+      // make first one capital
+      if (i === 0) {
+        tempmember.push(array[0][i].toUpperCase());
+      } else {
+        tempmember.push(array[0][i]);
+      }
+    }
+    newArray.push(tempmember.join(""));
+  }
+  helper(array);
+  return newArray;
+};
+console.log(compharensiveReverse(exampleArray));
+
+//Question is  Write a function called stringifyNumber which takes in an object and finds all of the values which are numbers and converts them to strings
+
+const obj = {
+  key1: 1,
+  key2: "3",
+  key3: 5,
+  key4: 6,
+};
+
+const stringifyNumber = (argument: any) => {
+  const array = [];
+
+  for (const key in argument) {
+    if (typeof argument[key] === "number") {
+      console.log(
+        key + " has number type of value and it is: " + argument[key]
+      );
+      array.push({ key: key, value: argument[key] });
+      argument[key] = String(argument[key]);
+      console.log(
+        "value: " +
+          argument[key] +
+          " is turned into the string it is belong the :" +
+          key
+      );
+    }
+  }
+
+  return { newObj: obj, filteredObjectMembers: array };
+};
+
+console.log(stringifyNumber(obj));
+
+// Flatten Again
+
+const exampleArrayAgain = [
+  1,
+  2,
+  [5, 6, 7, [9, 12, 13], [4, 5]],
+  31,
+  31,
+  [[[[[888]], 41]]],
+];
+const flattenArrayAgain = (array: any) => {
+  const newArray: any[] = [];
+
+  function helper(array: any) {
+    for (let i = 0; i < array.length; i++) {
+      if (Array.isArray(array[i])) {
+        // recursion
+        helper(array[i]);
+      } else {
+        newArray.push(array[i]);
+      }
+    }
+  }
+
+  helper(array);
+
+  return newArray;
+};
+
+console.log(flattenArrayAgain(exampleArrayAgain));
+
 export {};
