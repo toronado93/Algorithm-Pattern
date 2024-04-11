@@ -4,13 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/Pattern/AsynchronousControlFlowPattern/WithCallbacks/index.js",
     "build": "npx tsc"
   },
   "author": "EEP93",
   "license": "ISC",
   "devDependencies": {
+    "@types/mkdirp": "^2.0.0",
+    "@types/slug": "^5.0.8",
+    "@types/superagent": "^8.1.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "mkdirp": "^3.0.1",
+    "slug": "^9.0.0",
+    "superagent": "^8.1.2"
   }
 }
