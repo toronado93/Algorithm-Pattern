@@ -17,6 +17,7 @@
     "typescript": "^5.4.3"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "mkdirp": "^3.0.1",
     "slug": "^9.0.0",
     "superagent": "^8.1.2"

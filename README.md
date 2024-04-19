@@ -8,11 +8,14 @@ There are two main folders. Algorithm and Pattern.
 
   1.Algorithm
 
+A.Problem Solving Patterns
 -FrequencyCounterPattern
 -TwoPointerApproach
 -SlidingWindowPattern
 -DivideAndConquer
 -Recursion
+B.Sorting Algoritms
+-Bubble Sorting
 
 2.Pattern
 
