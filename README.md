@@ -16,6 +16,7 @@ A.Problem Solving Patterns
 -Recursion
 B.Sorting Algoritms
 -Bubble Sorting
+-Selection Sorting
 
 2.Pattern
 
