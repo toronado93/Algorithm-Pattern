@@ -17,6 +17,7 @@ A.Problem Solving Patterns
 B.Sorting Algoritms
 -Bubble Sorting
 -Selection Sorting
+-MergeSort
 
 2.Pattern
 

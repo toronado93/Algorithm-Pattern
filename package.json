@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/Pattern/AsynchronousControlFlowPattern/WithCallbacks/index.js",
+    "start": "index.js",
     "build": "npx tsc"
   },
   "author": "EEP93",
