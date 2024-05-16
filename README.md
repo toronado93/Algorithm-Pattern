@@ -24,7 +24,9 @@ B.Sorting Algoritms
 -CallbackEvents (Sync , Async reading file , Observer Pattern)
 -Asynchronous Control Flow Pattern with Callbacks
 -AsyncAwaitPatternMostRecent ("modern way to deal async function group sequentialy or parallel)
-This prinsible comes with some important discipline
+
+- LimitedParallelExecution (In order to balance resources we can also limit parallelexecution , good example of this approach please check limitedparallelexecution.ts out)
+  This prinsible comes with some important discipline
 
 1. Exist as soon as possible , when a task is about the done , we always first to think early exist possibilities and implemenet into the task
    (Be careful the make any common mistake , such as when task early exit if you forget the terminate main taks this would cause an issue , so dont forget the terminate main task when you invoked to callback)
