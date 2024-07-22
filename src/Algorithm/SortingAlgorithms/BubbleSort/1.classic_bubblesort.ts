@@ -9,9 +9,9 @@ function BubbleSorting(arr: any[]) {
     let isAnyChangingHaveOccured = false;
 
     for (let j = 0; j < i; j++) {
-      isAnyChangingHaveOccured = true;
       if (arr[j] > arr[j + 1]) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+        isAnyChangingHaveOccured = true;
       }
     }
     // optimization bootstrap
