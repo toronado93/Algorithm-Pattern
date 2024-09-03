@@ -1,3 +1,10 @@
+type SingleListCleanType = { [key: number]: { data: number } };
+type TShitInfo = {
+  Old_Node: SingleListCleanType;
+  New_Node: SingleListCleanType | undefined;
+  Deleted_Value: Node | undefined;
+};
+
 class Node {
   data: number;
   next: null | Node;
@@ -7,6 +14,7 @@ class Node {
     this.next = null;
   }
 }
+type tSomething = number;
 
 class SingleLinkList {
   head: null | Node;
@@ -74,11 +82,48 @@ class SingleLinkList {
       current = current.next;
     }
   }
+
+  cleanGet(): SingleListCleanType {
+    const item: SingleListCleanType | undefined = {};
+
+    let current = this.head;
+    let i = 1;
+    while (current) {
+      item[i] = { data: current.data };
+      i++;
+      current = current.next;
+    }
+
+    return item;
+  }
+
+  shift() {
+    //obtain the head of list
+    // then obtain the next item info of head item
+    // change head info to next item
+    // decrement length of the list
+    // return removed node info
+    if (!this.head) return undefined;
+    const info: TShitInfo = {
+      Old_Node: this.cleanGet(),
+      New_Node: undefined,
+      Deleted_Value: undefined,
+    };
+    const currentHead = this.head;
+    this.head = currentHead.next;
+    info.Deleted_Value = currentHead;
+    info.New_Node = this.cleanGet();
+    this.size--;
+    if (this.size === 0) {
+      this.tail = null;
+    }
+    return info;
+  }
 }
 
-const node1 = new Node(1);
-const node2 = new Node(2);
-const node3 = new Node(3);
+const node1 = new Node(5);
+const node2 = new Node(7);
+const node3 = new Node(12);
 
 const List = new SingleLinkList();
 
@@ -87,8 +132,11 @@ List.push(node2);
 List.push(node3);
 
 // read the list
-
-List.get();
+// List.get();
+// List.cleanGet();
 
 // delete the last item
-List.pop();
+// List.pop();
+
+// delete the first item
+console.log(List.shift());
