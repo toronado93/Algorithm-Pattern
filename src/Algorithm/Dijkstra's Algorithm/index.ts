@@ -84,28 +84,36 @@ class Diji {
       currentNode = this.Find_Lowest_Cost_Node();
     }
     // showing the path
-    this.ShowTheWay(startNode.name);
+    this.ShowTheWay();
   }
 
-  ShowTheWay(startNode: string) {
-    // we have the information of startnode so once main function is finished , we use parent dictionary to create a map
-    // like which dictionary has a child of start answer is b ,which dictionary has has a child of b answer is a , make it until you find nothing
-    // recursiove function
+  ShowTheWay() {
+    // inside the graph find the neigbourless node
+    const lastNode = this._Graph.find((node) => {
+      const neigbour = Object.keys(node.neighbours);
+      if (neigbour.length === 0) {
+        return node.name;
+      }
+    });
+
     const orderArray: string[] = [];
     let finalResult = "";
     const resultArray = [];
     let arrow = "-->";
 
-    const recursiveHelper = (startNode: string) => {
-      const currentName = startNode;
-      orderArray.push(currentName);
-      for (let eachChildren in this.Parent) {
-        if (this.Parent[eachChildren] === currentName) {
-          recursiveHelper(eachChildren);
-        }
+    const recursiveHelper = (lastNode: string) => {
+      if (lastNode === "") return;
+      const currentNodeName = lastNode;
+      orderArray.push(currentNodeName);
+
+      const parentOfCurrentNodeName = this.Parent[currentNodeName];
+      if (parentOfCurrentNodeName !== "") {
+        recursiveHelper(parentOfCurrentNodeName);
+      } else {
+        return;
       }
     };
-    recursiveHelper(startNode);
+    recursiveHelper(lastNode?.name || "");
     for (let eachNode of orderArray) {
       resultArray.push(eachNode);
       resultArray.push(arrow);
