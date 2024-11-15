@@ -58,4 +58,32 @@ console.log(
   result8
 );
 
+//  different example
+
+function lengthOfLongestSubstring(s: string) {
+  let maxlength = 0;
+  let lefIndex = 0;
+
+  const charSet = new Set();
+
+  for (let rightIndex = 0; rightIndex <= s.length - 1; rightIndex++) {
+    // encounter check
+    while (charSet.has(s[rightIndex])) {
+      charSet.delete(s[lefIndex]);
+      lefIndex++;
+    }
+    charSet.add(s[rightIndex]);
+
+    maxlength = Math.max(maxlength, rightIndex - lefIndex + 1);
+  }
+
+  return maxlength;
+  // create a set
+  // create left and right side of the windows
+  // start from beginning gradually increase window each step increase the length and windows size
+  // if you encounter with dublicate delete left index from set and increase the left windows and carry on loop
+}
+
+console.log(lengthOfLongestSubstring("dvdwf"));
+
 export {};

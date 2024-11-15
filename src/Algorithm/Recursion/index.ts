@@ -191,27 +191,51 @@
 
 //  Turing Questions
 
-function generateSubsetsRecursive(s: string): any {
-  const subsets: any[] = [];
+// function generateSubsetsRecursive(s: string): any {
+//   const subsets: any[] = [];
 
-  function helper(current: any, index: number) {
-    // base condition
-    if (index === s.length) {
-      subsets.push(current);
+//   function helper(current: any, index: number) {
+//     // base condition
+//     if (index === s.length) {
+//       subsets.push(current);
+//       return;
+//     }
+//     // MEMOISATION
+//     // Exclude the current character
+//     helper(current, index + 1);
+//     // Include the current character
+//     helper(current + s[index], index + 1);
+//   }
+
+//   helper("", 0);
+
+//   return subsets;
+// }
+
+// const s = "12345";
+
+// console.log(generateSubsetsRecursive(s));
+
+const createSubset = (n: number[]): number[][] => {
+  const subArray: number[][] = [];
+
+  function helper(current: number[], index: number) {
+    // Base condition: if we've considered all elements
+    if (index === n.length) {
+      subArray.push([...current]); // Add a copy of the current subset
       return;
     }
-    // MEMOISATION
-    // Exclude the current character
+
+    // Exclude the current element and move to the next
     helper(current, index + 1);
-    // Include the current character
-    helper(current + s[index], index + 1);
+    // Include the current element and move to the next
+    helper([...current, n[index]], index + 1);
   }
 
-  helper("", 0);
+  // Start with an empty subset
+  helper([], 0);
 
-  return subsets;
-}
+  return subArray;
+};
 
-const s = "12345";
-
-console.log(generateSubsetsRecursive(s));
+console.log(createSubset([1, 2, 3]));
