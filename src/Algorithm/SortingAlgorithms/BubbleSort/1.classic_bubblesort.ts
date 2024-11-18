@@ -33,4 +33,22 @@ function generateRandomArray(length: number, min: number, max: number) {
 
 console.log(BubbleSorting(generateRandomArray(100, 1, 999)));
 
+function BUBLESORTING(givenarray: number[]) {
+  for (let i = givenarray.length - 1; 0 <= i; i--) {
+    let isChanged = false;
+
+    for (let j = 0; j < i; j++) {
+      if (givenarray[j] > givenarray[j + 1]) {
+        [givenarray[j], givenarray[j + 1]] = [givenarray[j + 1], givenarray[j]];
+        isChanged = true;
+      }
+    }
+    if (!isChanged) break;
+  }
+
+  return givenarray;
+}
+
+console.log(BUBLESORTING(generateRandomArray(100, 1, 999)));
+
 export {};
