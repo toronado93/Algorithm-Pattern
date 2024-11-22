@@ -8,6 +8,15 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/dist/Algorithm/BreadthFirstSearchAlgorithm/index.js",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Zigzag Conversion",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/dist/Algorithm/TraversalPattern/index.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
   ]
 }
