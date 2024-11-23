@@ -17,6 +17,15 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/dist/Algorithm/TraversalPattern/index.js",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Missing_Number",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/dist/MultipleChoiceExamples/missingNumber.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
   ]
 }
