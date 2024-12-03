@@ -26,6 +26,14 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/dist/MultipleChoiceExamples/missingNumber.js",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Reverse_Integer",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/dist/MultipleChoiceExamples/reverseInteger.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
   ]
 }
