@@ -34,6 +34,14 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/dist/MultipleChoiceExamples/reverseInteger.js",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "pushZeroToEnd",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/dist/MultipleChoiceExamples/pushZeroToEndOfArray.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
   ]
 }
