@@ -42,6 +42,14 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/dist/MultipleChoiceExamples/pushZeroToEndOfArray.js",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "maximumsubarray",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/dist/LeetcodeBlind70/53.MaximumSubArray.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
   ]
 }

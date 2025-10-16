@@ -1,10 +1,3 @@
-// psuedo
-
-// iterate only one time
-// store information that holds the lowest number
-// store information that creates best profit margin
-// return the best profit margin when loop is complated
-
 function maxProfit(prices: number[]): number {
   let min = Infinity;
   let bestProfit = 0;
@@ -30,3 +23,6 @@ const results = [array1, array2].map((eachArray) => {
 console.log(results);
 
 export {};
+
+// mental model!!!
+// easy no need even for explanation
