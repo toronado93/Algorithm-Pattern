@@ -1,22 +1,54 @@
 import Fastify from "fastify";
-import initializeRabbitMQ from "./rabbitmq_con";
+import rabbitMQ from "./rabbitmq_con_class";
+import RabbitQueueWorker from "./queueworker";
 
 const app = Fastify({ logger: true });
 const PORT = 3000;
 
 const bootstrap = async () => {
   try {
-    const rabbitMQ = await initializeRabbitMQ(); // block here until connection + channel ready
-    if (!rabbitMQ) throw new Error("No rabbitmq available");
-    // message send attemps
-    const queue = "QUEUE1";
-    const message = "We are the world, we are the children!";
+    // rabbitmq initializtion
+    await rabbitMQ.initializeRabbitMQ();
 
-    // sender
-    rabbitMQ.channel.assertQueue(queue, { durable: false });
-    rabbitMQ.channel.sendToQueue(queue, Buffer.from(message));
+    // queue worker establishment
+    const rabbitInfo = rabbitMQ.getRabbit();
+    const queueWorker = new RabbitQueueWorker(rabbitInfo.channel);
+    const queue = "QUEUE1";
 
     app.get("/", async () => ({ hello: "world" }));
+    app.get("/createPublisher", async () => {
+      const message = "Dalton brothers are crying";
+      await queueWorker.simpleMQMessageSender(queue, message);
+      return { message: "message is sent" };
+    });
+    app.get("/createReciver", async () => {
+      queueWorker.simpleMessageReciver(queue);
+      return { message: "message is recieved" };
+    });
+
+    // establish worker example
+    app.get("/createWorkerP", async () => {
+      queueWorker.workerMQMessageSender();
+      return { message: "worker sender established" };
+    });
+    app.get("/createWorkerR", async () => {
+      queueWorker.workerMQMessageReciever();
+      return { message: "worker listener established" };
+    });
+
+    // multiple works
+    app.get("/sequentialWorkPublisher", async () => {
+      queueWorker.workerSenderSendsMultipleMessage();
+      return { message: "Sequential Work fired" };
+    });
+    app.get("/sequentialWorkReceiverWorker1", async () => {
+      queueWorker.workerRecieverWaitsForMultipleMessages(1);
+      return { message: "Worker-1 established" };
+    });
+    app.get("/sequentialWorkReceiverWorker2", async () => {
+      queueWorker.workerRecieverWaitsForMultipleMessages(2);
+      return { message: "Worker-2 established" };
+    });
 
     const address = await app.listen({ port: PORT, host: "0.0.0.0" });
     console.log(`Server up at ${address}`);
