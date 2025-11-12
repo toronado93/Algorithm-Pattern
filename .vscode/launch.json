@@ -50,6 +50,14 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/dist/LeetcodeBlind70/53.MaximumSubArray.js",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "searchinrotatedsortedarray",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/dist/LeetcodeBlind70/33.SearchInRotatedSortedArray.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
   ]
 }

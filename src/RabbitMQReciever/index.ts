@@ -15,6 +15,7 @@ initializeRabbitMQ()
       channel.consume(
         "QUEUE1",
         function (msg) {
+          if (!msg) return;
           console.log(" [x] Received %s", msg.content.toString());
         },
         {
