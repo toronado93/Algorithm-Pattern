@@ -147,7 +147,6 @@ class RabbitQueueWorker {
       { noAck: false }
     );
   }
-
   async exchangePublisher() {
     const exchange = "logs";
     const msg = "TM1 Server is crashed";
@@ -193,6 +192,138 @@ class RabbitQueueWorker {
       }
     );
   }
+
+  async fanOutExchangeForLogPublisher() {
+    // consumer side
+    // step-1 assertand exchange
+    await this.channel.assertExchange("log", "fanout", { durable: false });
+    // step-2 send a message to exchange
+    // second empty argument means we sending this to evert queue in that particular exchange in order to achieve broadcasting functionality
+    this.channel.publish(
+      "log",
+      "",
+      Buffer.from("There is an important log in here")
+    );
+    // no more step from publisher side as publisher only responsible to send message to exchange , exchange responsible send message to queue
+  }
+  async fanOutExchangeForLogReceiver(listenerId: number) {
+    // listener side
+    //step.1 create a queue
+    // Passing "" tells RabbitMQ “give me a fresh, unique queue name.”
+    const { queue } = await this.channel.assertQueue("", { exclusive: true });
+    // step-2 bind the queue to exchanger
+    // This tells RabbitMQ “deliver anything from logs into my queue.” Fanout ignores the routing key, so "" or any string behaves the same.
+    await this.channel.bindQueue(queue, "log", "");
+
+    // step.3 start to consume
+    const { consumerTag } = await this.channel.consume(
+      queue,
+      (msg) => {
+        if (!msg) return;
+        console.log(
+          `Consumer:${listenerId} catched this message; ${msg.content.toString()}`
+        );
+      },
+      { noAck: true }
+    );
+
+    // you can also use following methods to perform some actions
+
+    //   await channel.cancel(consumerTag);    // stops listener
+    //   await channel.deleteQueue(queue);     // optional, remove queue
+    //   await channel.close();                // optional, close channel
+  }
 }
 
 export default RabbitQueueWorker;
+
+//   Fanout Flow, Step by Step
+
+// Publisher: declare the exchange
+// await channel.assertExchange("logs", "fanout", { durable: false });
+// Exchanges don’t store messages; they route. You must make sure the exchange exists before publishing.
+
+// Publisher: send the message
+// channel.publish("logs", "", Buffer.from("hello"));
+// In fanout mode the routing key is ignored, so "" is fine. RabbitMQ copies the message to every queue bound to logs.
+
+// Consumer: create a queue
+// const { queue } = await channel.assertQueue("", { exclusive: true });
+// Passing "" tells RabbitMQ “give me a fresh, unique queue name.” It creates something like amq.gen-JzTY20BRgKO-HjmUJj0wLg that:
+
+// is private to this connection (exclusive: true)
+// auto-deletes when the connection closes
+// Each listener gets its own queue so everyone receives every broadcast copy. If you supplied a name (e.g., "logs_queue"), every listener would share that single queue, and RabbitMQ would round-robin messages between them—no longer a broadcast.
+// Consumer: bind queue to exchange
+// await channel.bindQueue(queue, "logs", "");
+// This tells RabbitMQ “deliver anything from logs into my queue.” Fanout ignores the routing key, so "" or any string behaves the same.
+
+// Consumer: start consuming
+// channel.consume(queue, (msg) => console.log(msg?.content.toString()), { noAck: true });
+// Each listener reads from its own auto-generated queue and gets every message.
+
+// What if assertQueue used a name?
+
+// assertQueue("listenerA", { exclusive: true }) would create a fixed queue named listenerA. If multiple consumers tried to declare the same exclusive queue, only the first would succeed; others would error.
+// assertQueue("shared", { exclusive: false }) would let multiple consumers attach, but they would compete: each message goes to only one consumer. That’s useful for work queues, not broadcasts.
+// So the "" queue name plus exclusive: true is the pattern that makes fanout behave like pub/sub: every listener gets its own temporary queue, and binding that queue to the exchange is what routes the messages there.
+
+//   Direct Exchange (exact routing keys)
+
+// Publisher declares the exchange
+// await channel.assertExchange("direct_logs", "direct", { durable: false });
+// Direct exchanges deliver a message only to queues whose binding key exactly matches the message’s routing key.
+
+// Publisher sends with a routing key
+// channel.publish("direct_logs", "error", Buffer.from("something broke"));
+// The routing key ("error", "info", etc.) is the selector. If no queue is bound with that key, the message is dropped unless you set mandatory.
+
+// Consumer declares/gets a queue
+// await channel.assertQueue("errors_only", { durable: false });
+// Here you deliberately use a fixed name—multiple consumers can share it if you want them to divide the workload; no need for "" because you want a specific bucket of messages.
+
+// Consumer binds queue with exact key
+// await channel.bindQueue("errors_only", "direct_logs", "error");
+// This says “deliver only messages where routingKey === 'error' into this queue.” You can bind multiple keys to the same queue if you want (bindQueue("errors_only", "direct_logs", "critical")).
+
+// Consumer starts consuming
+// channel.consume("errors_only", handler, { noAck: false });
+// Only messages published with routing key "error" (or whichever keys you bound) arrive.
+
+//   Headers Exchange (match on metadata instead of routing key)
+
+// Publisher declares the exchange
+// await channel.assertExchange("headers_logs", "headers", { durable: false });
+// Headers exchanges ignore routing keys entirely and just look at message headers.
+
+// Publisher sends with headers
+
+// channel.publish(
+//   "headers_logs",
+//   "",
+//   Buffer.from("pdf report"),
+//   { headers: { format: "pdf", type: "report" } }
+// );
+// Whatever key/value pairs you attach go into the message header table.
+
+// Consumer declares/gets a queue
+// Often you still use an auto-generated queue for private subscribers:
+// const { queue } = await channel.assertQueue("", { exclusive: true });
+// But you could give it a name if you want multiple consumers sharing that header filter.
+
+// Consumer binds queue with header arguments
+
+// await channel.bindQueue(queue, "headers_logs", "", {
+//   arguments: { format: "pdf", type: "report", "x-match": "all" },
+// });
+// x-match: "all" means every listed header must match; use "any" to match if at least one matches. Unlike fanout/direct/topic, the third argument (routing key) is ignored, so "" is fine.
+
+// Consumer starts consuming
+// channel.consume(queue, handler, { noAck: true });
+// Only messages whose headers satisfy the binding arguments appear in this queue.
+
+// So the key differences:
+
+// Direct: queue name usually explicit; you bind with exact routing keys.
+// Headers: binding uses arguments to describe header criteria; routing key is unused.
+// The flow—assert exchange, assert queue, bind, consume—remains the same; you just change what you bind on.

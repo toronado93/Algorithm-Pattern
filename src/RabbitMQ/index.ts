@@ -130,6 +130,31 @@ const bootstrap = async () => {
       return { message: "Exchange Receiver-2" };
     });
 
+    app.get("/fanoutExchangePublisher", async () => {
+      const { channel, connection } = rabbitMQ.getRabbit();
+      const worker = new RabbitQueueWorker(channel, connection);
+
+      await worker.fanOutExchangeForLogPublisher();
+
+      return { message: "Fanaout exchange publisher" };
+    });
+
+    app.get("/fanoutExchangeConsumer/1", async () => {
+      const { channel, connection } = rabbitMQ.getRabbit();
+      const worker = new RabbitQueueWorker(channel, connection);
+
+      await worker.fanOutExchangeForLogReceiver(1);
+      return { message: "Fanout exchange reciever -1" };
+    });
+
+    app.get("/fanoutExchangeConsumer/2", async () => {
+      const { channel, connection } = rabbitMQ.getRabbit();
+      const worker = new RabbitQueueWorker(channel, connection);
+
+      await worker.fanOutExchangeForLogReceiver(2);
+      return { message: "Fanout exchange reciever -2" };
+    });
+
     const address = await app.listen({ port: PORT, host: "0.0.0.0" });
     console.log(`Server up at ${address}`);
   } catch (err) {
